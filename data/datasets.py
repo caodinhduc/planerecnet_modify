@@ -364,8 +364,8 @@ if __name__ == "__main__":
         imgs, gt_instances, gt_depths = data_ele
         intrinsic_matrix = torch.stack([gt_instances[img_idx]['k_matrix'] for img_idx in range(len(gt_instances))], dim=0).cuda(cuda_id)
         gt_depths = torch.stack([gt_depths[img_idx] for img_idx in range(len(gt_depths))], dim=0)
-        intrinsic_inv = torch.inverse(intrinsic_matrix).float().to("cuda") # (B, 4, 4)
-        point_clouds = get_points_coordinate(gt_depths.permute(0,2,3,1).to("cuda"), instrinsic_inv=intrinsic_inv)
+        intrinsic_inv = torch.inverse(intrinsic_matrix).float().to("cuda: {}".format(cuda_id)) # (B, 4, 4)
+        point_clouds = get_points_coordinate(gt_depths.permute(0,2,3,1).to("cuda: {}".format(cuda_id)), instrinsic_inv=intrinsic_inv)
 
         for i in range(len(imgs)):
             inst = gt_instances[i]
@@ -381,7 +381,7 @@ if __name__ == "__main__":
                 pts = pts[:, valid_mask].double()
                 offset = offsets[j]
                 normal = normals[j]
-                dist = torch.abs(torch.matmul(pts.permute(1,0), normal) - offset).to("cuda").double()
+                dist = torch.abs(torch.matmul(pts.permute(1,0), normal) - offset).to("cuda: {}".format(cuda_id)).double()
                 error = error + dist.mean()
 
             print(error.item() / masks.shape[0])
