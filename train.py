@@ -323,8 +323,6 @@ def train():
                 continue
             
             # just for debugging
-            if iteration > 100 and iteration % 500 == 0:
-                continue
             
             for datum in data_loader:
                 # Stop if we've reached an epoch if we're resuming from start_iter
@@ -333,6 +331,9 @@ def train():
 
                 # Stop at the configured number of iterations even if mid-epoch
                 if iteration == cfg.max_iter:
+                    break
+                
+                if iteration > 100 and iteration % 500 == 0:
                     break
 
                 # Change a config setting if we've reached the specified iteration
