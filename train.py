@@ -333,9 +333,9 @@ def train():
                 if iteration == cfg.max_iter:
                     break
                 
-                if iteration > 100 and iteration % 500 == 0:
-                    iteration += 1
-                    break
+                # if iteration > 100 and iteration % 500 == 0:
+                #     iteration += 1
+                #     break
 
                 # Change a config setting if we've reached the specified iteration
                 changed = False
