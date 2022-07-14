@@ -317,9 +317,14 @@ def train():
     # try-except so you can use ctrl+c to save early and stop training
     try:
         for epoch in range(num_epochs):
+            print('training with epoch: {}'.format(epoch))
             # Resume from start_iter
             if (epoch+1)*epoch_size < iteration:
                 continue
+            
+            # just for debugging
+            if iteration % 500 == 0:
+                break
             
             for datum in data_loader:
                 # Stop if we've reached an epoch if we're resuming from start_iter
