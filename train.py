@@ -323,8 +323,8 @@ def train():
                 continue
             
             # just for debugging
-            if iteration % 500 == 0:
-                break
+            if iteration > 100 and iteration % 500 == 0:
+                continue
             
             for datum in data_loader:
                 # Stop if we've reached an epoch if we're resuming from start_iter
