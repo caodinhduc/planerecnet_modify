@@ -38,6 +38,7 @@ class PlaneAnnoDataset(data.Dataset):
         
         self.transform = transform
         self.name = dataset_name
+        # print(self.name)
         self.has_gt = has_gt
         self.has_pos = has_pos
     
@@ -71,6 +72,8 @@ class PlaneAnnoDataset(data.Dataset):
         assert osp.exists(path), 'Image path does not exist: {}'.format(path)
 
         img = cv2.imread(path).astype(np.float32)
+        # if self.name == 'ScanNetDataset':
+        # img = cv2.resize(img, (640, 480))
         height, width, _ = img.shape
 
         depth_path = self.get_depth_path(file_name)
