@@ -19,7 +19,8 @@ from models.functions.funcs import calc_size_preserve_ar, pad_even_divided
 from collections import defaultdict
 import numpy as np
 import scipy.io
-
+import imageio
+from PIL import Image
 
 cuda_id = 0
 color_cache = defaultdict(lambda: {})
@@ -30,7 +31,11 @@ def parse_args(argv=None):
     parser.add_argument("--config", default="PlaneRecNet_50_config", help="The config object to use.")
     # Inference Settings
     parser.add_argument("--image", default=None, type=str, help='Inference with a single image.')
-    parser.add_argument("--images", default=None, type=str, help='Inference with multiple images.')
+    parser.add_argument("--images", default=None, type=str, help='Inference with a single image.')
+    
+    parser.add_argument("--gt", default=None, type=str, help='gt')
+    parser.add_argument("--dataset", default='nyu', type=str, help='dataset')
+    
     parser.add_argument("--max_img", default=0, type=int, help="The maximum number of inference images in a folder.")
     parser.add_argument("--ibims1", default=None, type=str, help="Only for iBims-1 outputs")
     parser.add_argument("--ibims1_pd", default=None, type=str, help="test plane depth")
@@ -166,6 +171,21 @@ def inference_image(net: PlaneRecNet, path: str, save_path: str = None, depth_mo
         depth_path = name + '_dep.png'
         
     cv2.imwrite(save_path, blended_frame)
+    
+    resolution = 0
+    if args.dataset == 'nyu':
+        resolution = 1 / 65535.0 * 9.99547
+    if args.dataset == '2d3ds':
+        resolution = 1/512
+    
+    I = np.asarray(Image.open(args.gt)) * resolution
+    disparity = np.abs(depth - I)
+    vmin = np.percentile(disparity, 1)
+    vmax = np.percentile(disparity, 99)
+    disparity = disparity.clip(min=vmin, max=vmax)
+    disparity = ((disparity - disparity.min()) / (disparity.max() - disparity.min()) * 255).astype(np.uint8)
+    disparity_color = cv2.applyColorMap(disparity, cv2.COLORMAP_VIRIDIS)
+    cv2.imwrite('disparity.png', disparity_color)
 
     if depth_mode == 'colored':
         vmin = np.percentile(depth, 1)

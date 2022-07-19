@@ -65,7 +65,7 @@ def parse_args(argv=None):
     #                     help='valid images folder')
     # parser.add_argument('--eval_info', default='../stanford/s2d3ds_plane_anno/pre/s2d3ds_val.json', type=str,
     #                     help='valid annotation file')
-    # parser.add_argument('--eval_info', default='fine_350.json', type=str,
+    # parser.add_argument('--eval_info', default='fine_450.json', type=str,
     #                     help='valid annotation file')
     global args
     args = parser.parse_args(argv)
