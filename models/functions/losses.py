@@ -402,10 +402,31 @@ class EdgeLoss(nn.Module):
         target = target_boundary.contiguous().view(target.size()[0], -1).float()
         target = torch.abs(target)
         input = torch.abs(input)
-        pos_index = (input >= 0.5)
+        pos_index = (input >= 0.25)
         # pos_index = pos_index.data.cpu().numpy().astype(bool)
         input = input[pos_index]
         target = target[pos_index]
+
+        #---------------------------------------------------------------------------------------------------------------------
+        # import os
+        # import cv2
+        # import numpy as np
+        # for i in range(input_boundary.shape[0]):
+        #     current_tensor = input_boundary[i, :, :].detach().cpu().numpy()
+        #     current_tensor = ((current_tensor - current_tensor.min()) / (current_tensor.max() - current_tensor.min()) * 255).astype(np.uint8)
+        #     # current_tensor = cv2.Canny(current_tensor,50,100, 1)
+        #     tensor_color = cv2.applyColorMap(current_tensor, cv2.COLORMAP_VIRIDIS)
+        #     tensor_color_path = os.path.join('laplacian', '{}.png'.format(i))
+        #     cv2.imwrite(tensor_color_path, tensor_color)
+        
+        # for i in range(target_boundary.shape[0]):
+        #     current_tensor = target_boundary[i, :, :].detach().cpu().numpy()
+        #     current_tensor = ((current_tensor - current_tensor.min()) / (current_tensor.max() - current_tensor.min()) * 255).astype(np.uint8)
+        #     # current_tensor = cv2.Canny(current_tensor,50,100, 1)
+        #     tensor_color = cv2.applyColorMap(current_tensor, cv2.COLORMAP_VIRIDIS)
+        #     tensor_color_path = os.path.join('boundary', '{}.png'.format(i))
+        #     cv2.imwrite(tensor_color_path, tensor_color)
+        #--------
 
         loss = self.loss(input, target)
         return loss

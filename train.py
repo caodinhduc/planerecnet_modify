@@ -57,12 +57,12 @@ parser.add_argument('--reproductablity', dest='reproductablity', action='store_t
 # Set path for training
 parser.add_argument('--train_images', default='../stanford/s2d3ds_plane_anno/pre/images', type=str,
                     help='train images folder')
-parser.add_argument('--train_info', default='../fine_800.json', type=str,
+parser.add_argument('--train_info', default='../fine_1000.json', type=str,
                     help='train annotation file')
 
 parser.add_argument('--valid_images', default='../stanford/s2d3ds_plane_anno/pre/images_val', type=str,
                     help='valid images folder')
-parser.add_argument('--valid_info', default='fine_350.json', type=str,
+parser.add_argument('--valid_info', default='../fine_450.json', type=str,
                     help='valid annotation file')             
 
 # Hyper Parameters for Training
